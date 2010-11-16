@@ -19,7 +19,7 @@ require 'pause'
 function love.load()
 	game = Game:new()
 	--game.empires = {} or something like that?
-	game:pushState 'SystemView'
+	game:pushState 'MainMenu'
 end
 
 function love.update(dt)

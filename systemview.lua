@@ -1,10 +1,11 @@
 SystemView = Game:addState('SystemView')
 
 function SystemView:setup()
-	SystemView.system = {} --?
+	SystemView.system = {}
+	SystemView.arrows = {} --{origin, target, pos, pop}
 	xtime = 0
 	for i = 1, 20 do -- O(N*(N-1))?
-		local this_system = {math.random()*100, math.random()*100, pop = math.random()*2*math.pi, owner = math.random(1,2)}
+		local this_system = {math.random()*100, math.random()*100, pop = math.random()*2*math.pi, owner = math.random(1,3)}
 		local found_good_location
 		while not found_good_location do
 			found_good_location = true -- we assume that
@@ -19,9 +20,9 @@ function SystemView:setup()
 		end
 		self.system[#self.system + 1] = this_system
 	end
-	
-	colors = {{50, 50, 255}, {255, 100, 100}, sel = {200, 200, 255}}
-	SystemView.setup_done = true --?
+
+	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}}
+	SystemView.setup_done = true
 end
 
 function SystemView:enterState()
@@ -47,14 +48,54 @@ function SystemView:update(dt)
 			break
 		end
 	end
-	if love.mouse.isDown'r' and selected and highlight --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
-		attack_amount = attack_amount or 0
+	for i = 1, #self.arrows do
+		local arr = self.arrows[i]
+		if arr[4] + dt < arr[5] then
+			arr[4] = arr[4] + dt
+		else
+			if arr[1].owner == arr[2].owner then --transport
+				local newpop = arr[3] - dt
+				if newpop > 0 then
+					arr[3] = newpop
+					arr[2].pop = math.min(arr[2].pop + dt, 2*math.pi)
+				else
+					arr[2].pop = math.min(arr[2].pop + arr[3], 2*math.pi)
+					--kill this arrow
+					arr.kill = true
+				end
+			else --attack
+				local newpop = arr[3] - dt
+				if newpop > 0 then
+					arr[3] = newpop
+					arr[2].pop = arr[2].pop - math.random()*2*dt
+				else
+					arr[2].pop = arr[2].pop + dt -- defense bonus
+					--kill this arrow
+					arr.kill = true
+				end
+				if arr[2].pop < 0 then
+					arr[2].owner = arr[1].owner
+					arr[2].pop = -arr[2].pop
+				end
+			end
+		end
+	end
+	local i = 1
+	while i <= #self.arrows do
+		if self.arrows[i].kill then
+			table.remove(self.arrows, i)
+		else
+			i = i + 1
+		end
+	end
+	if love.mouse.isDown'r' and selected and highlight and SystemView.flowing and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
 		local sel = self.system[selected]
-		attack_amount = attack_amount + math.min(dt, sel.pop)
-		sel.pop = math.max(sel.pop - dt, 0)
-		if sel.pop == 0 then sel.pop = 0.01 attack_amount = attack_amount - 0.01 end
+		local arr = self.arrows[#self.arrows]
+		local newamount = math.max(sel.pop-dt, 0.01)
+		arr[3] = arr[3] + sel.pop - newamount
+		sel.pop = newamount
 	else
-		attack_amount = nil
+		SystemView.flowing = false
 	end
 end
 
@@ -63,17 +104,14 @@ function SystemView:draw()
 		love.graphics.setColor(255, 255, 255)
 		local x, y = unpack(self.system[i])
 		tools.circle(x*6, y*6, 10)
-		if attack_amount and i == selected then
-			love.graphics.line(x*6, y*6, (x+ attack_amount*(self.system[highlight][1]-x))*6, (y+ attack_amount*(self.system[highlight][2]-y))*6)
-		end
 		love.graphics.setColor(0, 0, 0)
 		tools.darc(x*6, y*6, 11, xtime+self.system[i].pop, xtime+2*math.pi)
 		tools.circle(x*6, y*6, 7)
 		if selected == i then
 			love.graphics.setColor(unpack(colors.sel))
 			tools.linecircle(x*6, y*6, 80 + self.system[i].pop * 10)
-		elseif highlight == i then
-			if not selected then
+		elseif highlight and self.system[highlight].owner == self.system[i].owner then --highlight == i then
+			if not selected and highlight == i then
 				love.graphics.setColor(255, 255, 255)
 				tools.linecircle(x*6, y*6, 80 + self.system[i].pop * 10)
 			end
@@ -83,16 +121,29 @@ function SystemView:draw()
 		end
 		tools.circle(x*6, y*6, 6)
 	end
+	love.graphics.setColor(255, 255, 255)
+	for i = 1, #self.arrows do
+		local arr = self.arrows[i]
+		if self.system[highlight] == arr[1] then
+			love.graphics.setColor(unpack(colors[arr[1].owner]))
+		else
+			love.graphics.setColor(255, 255, 255)
+		end
+		tools.part_arrow(arr[1][1]*6, arr[1][2]*6, arr[2][1]*6, arr[2][2]*6, (arr[4] - arr[3])*40, arr[4]*40)
+	end
 end
 
 function SystemView:keypressed(k, u)
-	if k == 'escape' then love.event.push'q' end
+	if k == 'escape' then game:popState() end
 end
 
 function SystemView:mousepressed(x, y, b)
-	if b == 'r' and selected and highlight and self.system[highlight].owner ~= 1 then
-		--attack!
-		--maybe something with holding the button?
+	if b == 'r' and selected and self.system[selected].pop > .05 and highlight and highlight ~= selected then
+		--attack/transport!
+		SystemView.flowing = true
+		local arr = {self.system[selected], self.system[highlight], 0, 0}
+		arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
+		self.arrows[#self.arrows + 1] = arr
 	elseif b == 'l' then
 		selected = highlight and self.system[highlight].owner == 1 and highlight -- it looks odd, but it works
 		-- first it checks whether something is highlighted, then it check if the highlighted system has the right owner, and finally it passes the highlighted sytem to to selected
