@@ -16,6 +16,8 @@ require 'systemview'
 --require 'planetview'
 require 'pause'
 
+require 'ai'
+
 function love.load()
 	game = Game:new()
 	--game.empires = {} or something like that?

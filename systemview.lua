@@ -22,6 +22,9 @@ function SystemView:setup()
 	end
 
 	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}}
+	
+	ais.load()
+	
 	SystemView.setup_done = true
 end
 
@@ -48,6 +51,9 @@ function SystemView:update(dt)
 			break
 		end
 	end
+
+	ais.update(dt)
+
 	for i = 1, #self.arrows do
 		local arr = self.arrows[i]
 		if arr[4] + dt < arr[5] then
