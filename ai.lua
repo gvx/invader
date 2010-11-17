@@ -26,7 +26,6 @@ function AI:update(dt)
 				end
 				source = math.random(#t)
 				while game.system[t[source]].owner ~= self.name do
-					print(source, t[source])
 					table.remove(t, source)
 					if #t == 0 then
 						self.dead = true
