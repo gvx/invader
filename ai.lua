@@ -17,7 +17,7 @@ function AI:update(dt)
 			self.timeout = self.timeout - dt
 			if self.timeout <= 0 then
 				self.timeout = nil
-				self.timeleft = 3
+				self.timeleft = math.random()*4 + .5
 				-- make an arrow
 				local source, target
 				local t = {}
@@ -25,8 +25,8 @@ function AI:update(dt)
 					t[i] = i
 				end
 				source = math.random(#t)
-				print(self.name)
 				while game.system[t[source]].owner ~= self.name do
+					print(source, t[source])
 					table.remove(t, source)
 					if #t == 0 then
 						self.dead = true
@@ -39,7 +39,7 @@ function AI:update(dt)
 					target = math.random(#game.system)
 				end
 				if not self.dead then
-					self.source = game.system[source]
+					self.source = game.system[t[source]]
 					self.target = game.system[target]
 					local arr = {self.source, self.target, 0, 0}
 					arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
@@ -50,7 +50,7 @@ function AI:update(dt)
 		else
 			self.timeleft = self.timeleft - dt
 			if self.timeleft <= 0 or self.source.pop < 0.05 then
-				self.timeout = math.random() * 2 + .5
+				self.timeout = math.random() * 2 + math.random()+math.random() + .5
 				self.timeleft = nil
 				-- finish arrow
 			else
