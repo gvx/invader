@@ -14,6 +14,11 @@ function tools.linecircle(x, y, r)
 	love.graphics.circle('line', x, y, r, r*2)
 end
 
+function tools.fillcircle(x, y, r)
+	love.graphics.circle('fill', x, y, r, r*2)
+end
+
+
 function tools.poly(...)
 	love.graphics.polygon('fill', ...)
 	love.graphics.polygon('line', ...)

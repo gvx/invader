@@ -21,7 +21,7 @@ function SystemView:setup()
 		self.system[#self.system + 1] = this_system
 	end
 
-	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}}
+	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 40}}
 	
 	ais.load()
 	
@@ -46,8 +46,11 @@ function SystemView:update(dt)
 	for i = 1, #self.system do
 		local sys = self.system[i]
 		sys.pop = math.min(sys.pop + dt*.1, math.pi*2)
-		if tools.square_dist(mouse, sys) < 4 then
+		if tools.square_dist(mouse, sys) < 5 then
 			highlight = i
+			if selected and selected ~= highlight then
+				dist = math.sqrt((self.system[selected][1] - self.system[highlight][1])^2 + (self.system[selected][2] - self.system[highlight][2])^2)*6
+			end
 			break
 		end
 	end
@@ -94,7 +97,7 @@ function SystemView:update(dt)
 			i = i + 1
 		end
 	end
-	if love.mouse.isDown'r' and selected and highlight and SystemView.flowing and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
+	if love.mouse.isDown'r' and selected and highlight and SystemView.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
 		local sel = self.system[selected]
 		local arr = self.arrows[#self.arrows]
 		local newamount = math.max(sel.pop-dt, 0.01)
@@ -115,12 +118,7 @@ function SystemView:draw()
 		tools.circle(x*6, y*6, 7)
 		if selected == i then
 			love.graphics.setColor(unpack(colors.sel))
-			tools.linecircle(x*6, y*6, 80 + self.system[i].pop * 10)
 		elseif highlight and self.system[highlight].owner == self.system[i].owner then --highlight == i then
-			if not selected and highlight == i then
-				love.graphics.setColor(255, 255, 255)
-				tools.linecircle(x*6, y*6, 80 + self.system[i].pop * 10)
-			end
 			love.graphics.setColor(unpack(colors[self.system[i].owner]))
 		else
 			love.graphics.setColor(255, 255, 255)
@@ -137,6 +135,20 @@ function SystemView:draw()
 		end
 		tools.part_arrow(arr[1][1]*6, arr[1][2]*6, arr[2][1]*6, arr[2][2]*6, (arr[4] - arr[3])*40, arr[4]*40)
 	end
+	if selected then
+		love.graphics.setColor(unpack(colors.sel))
+		local x, y = unpack(self.system[selected])
+		tools.linecircle(x*6, y*6, 120 + self.system[selected].pop * 30)
+		love.graphics.setColor(unpack(colors.sel_alpha))
+		tools.fillcircle(x*6, y*6, 120 + self.system[selected].pop * 30)
+	elseif highlight then
+		local i = highlight
+		local x, y = unpack(self.system[i])
+		love.graphics.setColor(255, 255, 255)
+		tools.linecircle(x*6, y*6, 120 + self.system[i].pop * 30)
+		love.graphics.setColor(255, 255, 255, 15)
+		tools.fillcircle(x*6, y*6, 120 + self.system[i].pop * 30)
+	end
 end
 
 function SystemView:keypressed(k, u)
@@ -144,7 +156,7 @@ function SystemView:keypressed(k, u)
 end
 
 function SystemView:mousepressed(x, y, b)
-	if b == 'r' and selected and self.system[selected].pop > .05 and highlight and highlight ~= selected then
+	if b == 'r' and selected and self.system[selected].pop > .05 and dist <= 120 + self.system[selected].pop * 30 and highlight and highlight ~= selected then
 		--attack/transport!
 		SystemView.flowing = true
 		local arr = {self.system[selected], self.system[highlight], 0, 0}

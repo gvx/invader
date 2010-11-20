@@ -33,11 +33,19 @@ function AI:update(dt)
 					end
 					source = math.random(#t)
 				end
-				target = math.random(#game.system)
-				while target == source do
-					target = math.random(#game.system)
-				end
 				if not self.dead then
+					target = math.random(#game.system)
+					maxdist = (120 + game.system[t[source]].pop * 30)^2/36
+					local i = 0
+					while target == source or tools.square_dist(game.system[target], game.system[t[source]]) > maxdist do
+						target = math.random(#game.system)
+						i = i + 1
+						if i > 40 then
+							-- can't find a match
+							return
+						end
+					end
+					self.dist = math.sqrt(tools.square_dist(game.system[target], game.system[t[source]]))
 					self.source = game.system[t[source]]
 					self.target = game.system[target]
 					local arr = {self.source, self.target, 0, 0}
@@ -48,7 +56,7 @@ function AI:update(dt)
 			end
 		else
 			self.timeleft = self.timeleft - dt
-			if self.timeleft <= 0 or self.source.pop < 0.05 then
+			if self.timeleft <= 0 or self.source.pop < 0.05 or self.dist > 20 + self.source.pop * 5 then
 				self.timeout = math.random() * 2 + math.random()+math.random() + .5
 				self.timeleft = nil
 				-- finish arrow
