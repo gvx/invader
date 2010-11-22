@@ -1,5 +1,6 @@
 function love.conf(t)
 	t.modules.physics = false
+	t.modules.joystick = false
 	t.title = "Invader"
 	t.author = "Robin Wellner"
 	t.screen.fullscreen = false

@@ -118,10 +118,10 @@ function SystemView:draw()
 		tools.circle(x*6, y*6, 7)
 		if selected == i then
 			love.graphics.setColor(unpack(colors.sel))
-		elseif highlight and self.system[highlight].owner == self.system[i].owner then --highlight == i then
+		else--if highlight and self.system[highlight].owner == self.system[i].owner then --highlight == i then
 			love.graphics.setColor(unpack(colors[self.system[i].owner]))
-		else
-			love.graphics.setColor(255, 255, 255)
+		--else
+			--love.graphics.setColor(255, 255, 255)
 		end
 		tools.circle(x*6, y*6, 6)
 	end
