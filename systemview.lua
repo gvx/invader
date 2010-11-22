@@ -1,9 +1,15 @@
 SystemView = Game:addState('SystemView')
+SystemView.font = love.graphics.newFont('kabel.ttf', 16)
+local highlight
+local selected
 
 function SystemView:setup()
 	SystemView.system = {}
+	SystemView.ownsystems = 0
 	SystemView.arrows = {} --{origin, target, pos, pop}
 	xtime = 0
+	highlight = nil
+	selected = nil
 	for i = 1, 20 do -- O(N*(N-1))?
 		local this_system = {math.random()*100, math.random()*100, pop = math.random()*2*math.pi, owner = math.random(1,3)}
 		local found_good_location
@@ -19,6 +25,9 @@ function SystemView:setup()
 			end
 		end
 		self.system[#self.system + 1] = this_system
+		if this_system.owner == 1 then
+			SystemView.ownsystems = SystemView.ownsystems + 1
+		end
 	end
 
 	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 40}}
@@ -29,12 +38,13 @@ function SystemView:setup()
 end
 
 function SystemView:enterState()
+	love.graphics.setFont(SystemView.font)
 	if not self.setup_done then
 		self:setup()
 	end
 end
 function SystemView:exitState()
-	--
+	love.graphics.setFont(MainMenu.font)
 end
 
 function SystemView:update(dt)
@@ -83,6 +93,11 @@ function SystemView:update(dt)
 					arr.kill = true
 				end
 				if arr[2].pop < 0 then
+					if arr[1].owner == 1 then -- yay!
+						SystemView.ownsystems = SystemView.ownsystems + 1
+					elseif arr[2].owner == 1 then -- aww
+						SystemView.ownsystems = SystemView.ownsystems - 1
+					end
 					arr[2].owner = arr[1].owner
 					arr[2].pop = -arr[2].pop
 				end
@@ -105,6 +120,16 @@ function SystemView:update(dt)
 		sel.pop = newamount
 	else
 		SystemView.flowing = false
+	end
+	if self.endgame then
+		self.endgame = self.endgame - dt
+		if self.endgame <= 0 then
+			self.endgame = nil
+			SystemView.setup_done = false
+			game:popState()
+		end
+	elseif self.ownsystems == #self.system then
+		self.endgame = 5
 	end
 end
 
@@ -148,6 +173,15 @@ function SystemView:draw()
 		tools.linecircle(x*6, y*6, 120 + self.system[i].pop * 30)
 		love.graphics.setColor(255, 255, 255, 15)
 		tools.fillcircle(x*6, y*6, 120 + self.system[i].pop * 30)
+	end
+	
+	love.graphics.setColor(0, 0, 0, 100)
+	love.graphics.rectangle('fill', 700, 0, 100, 30)
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print(self.ownsystems .. ' / ' .. #self.system, 710, 5)
+	if self.endgame then
+		--love.graphics.line(700, 30.5, 700+100*self.endgame*.2, 30.5)
+		love.graphics.rectangle('fill', 700, 30, 100*self.endgame*.2, 3)
 	end
 end
 

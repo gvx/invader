@@ -1,13 +1,13 @@
 MainMenu = Game:addState('MainMenu')
 MainMenu.selected = 1
-MainMenu.items = {'new', 'load', 'settings', 'credits', 'quit'}
+MainMenu.items = {'new', 'continue', 'load', 'settings', 'credits', 'quit'}
 local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', settings = 'Settings...', credits = 'Credits', quit = 'Quit'}
 if love.filesystem.exists('continue') then
 	table.insert(MainMenu.items, 1, 'continue')
 end
-local font = love.graphics.newFont('kabel.ttf', 26)
-love.graphics.setFont(font)
+MainMenu.font = love.graphics.newFont('kabel.ttf', 26)
 function MainMenu:enterState()
+	love.graphics.setFont(MainMenu.font)
 end
 function MainMenu:exitState()
 	--
@@ -107,6 +107,9 @@ function MainMenu:keypressed(k, u)
 	elseif k == 'return' then
 		local sel = MainMenu.items[MainMenu.selected]
 		if sel == 'new' then
+			SystemView.setup_done = false
+			game:pushState 'SystemView'
+		elseif sel == 'continue' then
 			game:pushState 'SystemView'
 		elseif sel == 'quit' then
 			love.event.push 'q'
