@@ -1,7 +1,8 @@
 MainMenu = Game:addState('MainMenu')
 MainMenu.selected = 1
-MainMenu.items = {'new', 'continue', 'load', 'settings', 'credits', 'quit'}
-local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', settings = 'Settings...', credits = 'Credits', quit = 'Quit'}
+MainMenu.items = {'new', 'continue', 'load', 'save', 'settings', 'credits', 'quit'}
+MainMenu.showitem = {true, false, true, false, true, true, true, n = 5}
+local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Settings...', credits = 'Credits', quit = 'Quit'}
 if love.filesystem.exists('continue') then
 	table.insert(MainMenu.items, 1, 'continue')
 end
@@ -68,6 +69,10 @@ function MainMenu:update(dt)
 			MainMenu.selected = math.floor((mouse.y - 200) / 50)
 		end
 	end
+	
+	self.showitem[2] = SystemView.setup_done
+	self.showitem[4] = SystemView.setup_done
+	
 	love.timer.sleep(50)
 end
 
@@ -87,13 +92,17 @@ function ufo.draw()
 end
 
 function MainMenu:draw()
-	for i, item in ipairs(MainMenu.items) do
-		love.graphics.setColor(255, 255, 255)
-		if MainMenu.selected == i then
-			tools.poly(340 - (i > 1 and i < 4 and 9 or 0), 240 + 50 * i, 550, 247 + 50 * i - (i == 5 and 13 or 0), 557 - (i%2) * 17, 181 + 50 * i, 332, 192 + 50 * i)
-			love.graphics.setColor(0, 0, 0)
+	local i = 0
+	for j, item in ipairs(MainMenu.items) do
+		if self.showitem[j] then
+			i = i + 1
+			love.graphics.setColor(255, 255, 255)
+			if MainMenu.selected == i then
+				tools.poly(340 - (i > 1 and i < 4 and 9 or 0), 190 + 50 * i, 550, 197 + 50 * i - (i == 5 and 13 or 0), 557 - (i%2) * 17, 131 + 50 * i, 332, 142 + 50 * i)
+				love.graphics.setColor(0, 0, 0)
+			end
+			love.graphics.print(item, 350, 150 + 50 * i)
 		end
-		love.graphics.print(item, 350, 200 + 50 * i)
 	end
 	ufo.draw()
 end
@@ -101,11 +110,15 @@ end
 
 function MainMenu:keypressed(k, u)
 	if k == 'up' then
-		MainMenu.selected = (MainMenu.selected - 2) % #MainMenu.items + 1
+		MainMenu.selected = (MainMenu.selected - 2) % MainMenu.showitem.n + 1
 	elseif k == 'down' then
-		MainMenu.selected = MainMenu.selected % #MainMenu.items + 1
+		MainMenu.selected = MainMenu.selected % MainMenu.showitem.n + 1
 	elseif k == 'return' then
-		local sel = MainMenu.items[MainMenu.selected]
+		local j = MainMenu.selected
+		for i=1,j do
+			if not MainMenu.showitem[i] then j = j + 1 end
+		end
+		local sel = MainMenu.items[j]
 		if sel == 'new' then
 			SystemView.setup_done = false
 			game:pushState 'SystemView'
