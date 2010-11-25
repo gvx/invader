@@ -6,12 +6,13 @@ local selected
 function SystemView:setup()
 	SystemView.system = {}
 	SystemView.ownsystems = 0
+	SystemView.view = {x = 0, y = 0}
 	SystemView.arrows = {} --{origin, target, pos, pop}
 	xtime = 0
 	highlight = nil
 	selected = nil
-	for i = 1, 20 do -- O(N*(N-1))?
-		local this_system = {math.random()*100, math.random()*100, pop = math.random()*2*math.pi, owner = math.random(1,3)}
+	for i = 1, 90 do -- O(N*(N-1))?
+		local this_system = {math.random()*200, math.random()*200, pop = math.random()*math.pi+.2, owner = math.random(1,3)}
 		local found_good_location
 		while not found_good_location do
 			found_good_location = true -- we assume that
@@ -47,11 +48,27 @@ function SystemView:exitState()
 	love.graphics.setFont(MainMenu.font)
 end
 
+local scrollspeed = 200
+
 function SystemView:update(dt)
+	local k = love.keyboard.isDown
+	if k'left' and self.view.x > 0 then
+		SystemView.view.x = SystemView.view.x - scrollspeed*dt
+	end
+	if k'right' and self.view.x < 600 then
+		SystemView.view.x = SystemView.view.x + scrollspeed*dt
+	end
+	if k'up' and self.view.y > 0 then
+		SystemView.view.y = SystemView.view.y - scrollspeed*dt
+	end
+	if k 'down' and self.view.y < 600 then
+		SystemView.view.y = SystemView.view.y + scrollspeed*dt
+	end
+
 	xtime = xtime + dt
 	local mouse = {love.mouse.getPosition()}
-	mouse[1] = mouse[1] * .1666666667
-	mouse[2] = mouse[2] * .1666666667
+	mouse[1] = (mouse[1] + self.view.x) * .1666666667
+	mouse[2] = (mouse[2] + self.view.y) * .1666666667
 	highlight = nil
 	for i = 1, #self.system do
 		local sys = self.system[i]
@@ -134,6 +151,8 @@ function SystemView:update(dt)
 end
 
 function SystemView:draw()
+	love.graphics.push()
+	love.graphics.translate(-self.view.x,-self.view.y)
 	for i = 1, #self.system do
 		love.graphics.setColor(255, 255, 255)
 		local x, y = unpack(self.system[i])
@@ -175,6 +194,7 @@ function SystemView:draw()
 		tools.fillcircle(x*6, y*6, 120 + self.system[i].pop * 30)
 	end
 	
+	love.graphics.pop()
 	love.graphics.setColor(0, 0, 0, 100)
 	love.graphics.rectangle('fill', 700, 0, 100, 30)
 	love.graphics.setColor(255, 255, 255)
