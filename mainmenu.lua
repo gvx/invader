@@ -65,8 +65,8 @@ function MainMenu:update(dt)
 	if newmousex ~= mouse.x or newmousey ~= mouse.y then
 		mouse.x = newmousex
 		mouse.y = newmousey
-		if mouse.x > 300 and mouse.x < 500 and mouse.y > 250 and mouse.y < 250+50*#MainMenu.items then
-			MainMenu.selected = math.floor((mouse.y - 200) / 50)
+		if mouse.x > 300 and mouse.x < 500 and mouse.y > 200 and mouse.y < 200+50*#MainMenu.items then
+			MainMenu.selected = math.floor((mouse.y - 150) / 50)
 		end
 	end
 	
@@ -131,7 +131,7 @@ function MainMenu:keypressed(k, u)
 end
 
 function MainMenu:mousepressed(x, y, button)
-	if button == 'l' and x > 300 and x < 500 and y > 250 and y < 250+50*#MainMenu.items then
+	if button == 'l' and x > 300 and x < 500 and y > 200 and y < 200+50*#MainMenu.items then
 		self:keypressed('return')
 	end
 end
