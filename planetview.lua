@@ -5,7 +5,7 @@ function PlanetView:enterState()
 	local sys = PlanetView.system
 	for i = 1, #sys do
 		local planet = sys.planets[i]
-		PlanetView.planets[i] = {pop = planet.pop}
+		PlanetView.planets[i] = {pop = planet}
 	end
 end
 
@@ -15,4 +15,9 @@ end
 
 function PlanetView:keypressed(k, u)
 	if k == 'escape' then game:popState() end
+end
+
+
+function PlanetView:draw()
+	tools.circle(150, 150, 100)
 end
