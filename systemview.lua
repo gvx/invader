@@ -222,8 +222,8 @@ function SystemView:mousepressed(x, y, b)
 		self.arrows[#self.arrows + 1] = arr
 	elseif b == 'r' and highlight == selected then
 		-- go into Planet mode
-		Planet.system = self.system[selected]
-		game:pushState(Planet)
+		PlanetView.system = self.system[selected]
+		game:pushState 'PlanetView'
 	elseif b == 'l' then
 		selected = highlight and self.system[highlight].owner == 1 and highlight -- it looks odd, but it works
 		-- first it checks whether something is highlighted, then it check if the highlighted system has the right owner, and finally it passes the highlighted sytem to to selected

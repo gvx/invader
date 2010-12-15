@@ -13,7 +13,7 @@ Game.mousereleased = nilfunc
 
 require 'mainmenu'
 require 'systemview'
---require 'planetview'
+require 'planetview'
 require 'pause'
 
 require 'ai'
@@ -48,7 +48,7 @@ function love.mousereleased(x, y, button)
 	game:mousereleased(x, y, button)
 end
 
-local noPause = {Pause = true, MainMenu = true}
+local noPause = {Pause = true, MainMenu = true, PlanetView = true}
 function love.focus(f)
 	if not f and not noPause[game:getCurrentStateName()] then
 		game:pushState 'Pause'
