@@ -12,7 +12,11 @@ function SystemView:setup()
 	highlight = nil
 	selected = nil
 	for i = 1, 90 do -- O(N*(N-1))?
-		local this_system = {math.random()*200, math.random()*200, pop = math.random()*math.pi+.2, owner = math.random(1,3)}
+		local this_system = {math.random()*200, math.random()*200, pop = math.random()*math.pi+.2, owner = math.random(1,3), planets = {}}
+		this_system.planets[1] = this_system.pop
+		for i=2,math.random(1,3) do
+			this_system.planets[i] = -math.random() * 2 * math.pi
+		end
 		local found_good_location
 		while not found_good_location do
 			found_good_location = true -- we assume that
