@@ -3,7 +3,7 @@ PlanetView = Game:addState('PlanetView')
 function PlanetView:enterState()
 	PlanetView.planets = {}
 	local sys = PlanetView.system
-	for i = 1, #sys do
+	for i = 1, #sys.planets do
 		local planet = sys.planets[i]
 		PlanetView.planets[i] = {pop = planet}
 	end

@@ -76,6 +76,7 @@ function SystemView:update(dt)
 	highlight = nil
 	for i = 1, #self.system do
 		local sys = self.system[i]
+		print(sys)
 		sys.pop = math.min(sys.pop + dt*.1, math.pi*2)
 		if tools.square_dist(mouse, sys) < 5 then
 			highlight = i
@@ -133,7 +134,7 @@ function SystemView:update(dt)
 			i = i + 1
 		end
 	end
-	if love.mouse.isDown'r' and selected and highlight and SystemView.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
+	if love.mouse.isDown'r' and selected and highlight and selected ~= highlight and SystemView.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
 		local sel = self.system[selected]
 		local arr = self.arrows[#self.arrows]
 		local newamount = math.max(sel.pop-dt, 0.01)
@@ -214,13 +215,14 @@ function SystemView:keypressed(k, u)
 end
 
 function SystemView:mousepressed(x, y, b)
-	if b == 'r' and selected and self.system[selected].pop > .05 and dist <= 120 + self.system[selected].pop * 30 and highlight and highlight ~= selected then
+	if b == 'r' and selected and self.system[selected].pop > .05 and highlight and highlight ~= selected and dist <= 120 + self.system[selected].pop * 30 then
 		--attack/transport!
 		SystemView.flowing = true
 		local arr = {self.system[selected], self.system[highlight], 0, 0}
 		arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
 		self.arrows[#self.arrows + 1] = arr
 	elseif b == 'r' and selected and highlight == selected then
+		print(selected, self.system[selected])
 		-- go into Planet mode
 		PlanetView.system = self.system[selected]
 		game:pushState 'PlanetView'
