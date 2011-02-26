@@ -54,11 +54,8 @@ function AI:update(dt)
 					table.insert(game.arrows, 1, arr)
 				end
 			end
-		else
+		elseif self.source then
 			self.timeleft = self.timeleft - dt
-			if not self.source then
-				print(self.name, '!!!')
-			end
 			if self.timeleft <= 0 or self.source.pop < 0.05 or self.dist > 20 + self.source.pop * 5 then
 				self.timeout = math.random() * 2 + math.random()+math.random() + .5
 				self.timeleft = nil
@@ -68,6 +65,8 @@ function AI:update(dt)
 				self.curr_arrow[3] = self.curr_arrow[3] + self.source.pop - newamount
 				self.source.pop = newamount
 			end
+		else
+			self.timeout = 0
 		end
 	end
 end

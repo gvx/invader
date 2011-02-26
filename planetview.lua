@@ -9,6 +9,9 @@ function PlanetView:enterState()
 	end
 end
 
+function PlanetView:update(dt)
+end
+
 function PlanetView:exitState()
 	-- give back changes in planet population to SystemView
 end

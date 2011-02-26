@@ -76,7 +76,6 @@ function SystemView:update(dt)
 	highlight = nil
 	for i = 1, #self.system do
 		local sys = self.system[i]
-		print(sys)
 		sys.pop = math.min(sys.pop + dt*.1, math.pi*2)
 		if tools.square_dist(mouse, sys) < 5 then
 			highlight = i
@@ -222,7 +221,6 @@ function SystemView:mousepressed(x, y, b)
 		arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
 		self.arrows[#self.arrows + 1] = arr
 	elseif b == 'r' and selected and highlight == selected then
-		print(selected, self.system[selected])
 		-- go into Planet mode
 		PlanetView.system = self.system[selected]
 		game:pushState 'PlanetView'
