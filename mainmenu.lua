@@ -72,7 +72,8 @@ function MainMenu:update(dt)
 	
 	self.showitem[2] = SystemView.setup_done
 	self.showitem[4] = SystemView.setup_done
-	
+	self.showitem.n = SystemView.setup_done and 7 or 5 
+
 	love.timer.sleep(50)
 end
 
