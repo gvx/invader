@@ -3,8 +3,8 @@ SystemView.font = love.graphics.newFont('kabel.ttf', 16)
 local highlight
 local selected
 
-ARROW_SPEED = .5
-POPULATION_GROWTH = .05
+ARROW_SPEED = 2
+POPULATION_GROWTH = .2
 
 function SystemView:setup()
 	SystemView.system = {}
