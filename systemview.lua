@@ -152,7 +152,7 @@ function SystemView:update(dt)
 			SystemView.setup_done = false
 			game:popState()
 		end
-	elseif self.ownsystems == #self.system then
+	elseif self.ownsystems == #self.system or self.ownsystems == 0 then
 		self.endgame = 5
 	end
 end
