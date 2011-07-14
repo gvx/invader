@@ -14,8 +14,8 @@ function SystemView:setup()
 	xtime = 0
 	highlight = nil
 	selected = nil
-	for i = 1, 90 do -- O(N*(N-1))?
-		local this_system = {math.random()*200, math.random()*200, pop = math.random()*math.pi+.2, owner = math.random(1,3), planets = {}}
+	for i = 1, 100 do -- O(N*(N-1))?
+		local this_system = {5 + math.random()*190, 5 + math.random()*190, pop = math.random()*math.pi+.2, owner = math.random(1,3), planets = {}}
 		this_system.planets[1] = this_system.pop
 		for i=2,math.random(1,3) do
 			this_system.planets[i] = -math.random() * 2 * math.pi
@@ -25,8 +25,8 @@ function SystemView:setup()
 			found_good_location = true -- we assume that
 			for j=1,i-1 do
 				if tools.square_dist(this_system, self.system[j]) < 125 then
-					this_system[1] = math.random()*100
-					this_system[2] = math.random()*100
+					this_system[1] = 5 + math.random()*190
+					this_system[2] = 5 + math.random()*190
 					found_good_location = false
 					break
 				end
@@ -62,13 +62,13 @@ function SystemView:update(dt)
 	if k'left' and self.view.x > 0 then
 		SystemView.view.x = SystemView.view.x - scrollspeed*dt
 	end
-	if k'right' and self.view.x < 600 then
+	if k'right' and self.view.x < 1200 - love.graphics.getWidth() then
 		SystemView.view.x = SystemView.view.x + scrollspeed*dt
 	end
 	if k'up' and self.view.y > 0 then
 		SystemView.view.y = SystemView.view.y - scrollspeed*dt
 	end
-	if k 'down' and self.view.y < 600 then
+	if k 'down' and self.view.y < 1200 - love.graphics.getHeight() then
 		SystemView.view.y = SystemView.view.y + scrollspeed*dt
 	end
 

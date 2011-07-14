@@ -115,10 +115,16 @@ function MainMenu:keypressed(k, u)
 	elseif k == 'down' then
 		MainMenu.selected = MainMenu.selected % MainMenu.showitem.n + 1
 	elseif k == 'return' then
-		local j = MainMenu.selected
-		for i=1,j do
-			if not MainMenu.showitem[i] then j = j + 1 end
+		local i = 1
+		local j = 0
+		while i <= MainMenu.selected do
+			if not MainMenu.showitem[i+j] then
+				j = j + 1
+			else
+				i = i + 1
+			end
 		end
+		j = j + i - 1
 		local sel = MainMenu.items[j]
 		if sel == 'new' then
 			SystemView.setup_done = false
@@ -127,6 +133,14 @@ function MainMenu:keypressed(k, u)
 			game:pushState 'SystemView'
 		elseif sel == 'quit' then
 			love.event.push 'q'
+		elseif sel == 'settings' then
+			if fullscreen then
+				love.graphics.setMode(800, 600)
+			else
+				local modes = love.graphics.getModes()
+				love.graphics.setMode(modes[1].width, modes[1].height, true)
+			end
+			fullscreen = not fullscreen
 		end
 	end
 end
