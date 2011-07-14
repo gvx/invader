@@ -102,7 +102,7 @@ function MainMenu:draw()
 				tools.poly(340 - (i > 1 and i < 4 and 9 or 0), 190 + 50 * i, 550, 197 + 50 * i - (i == 5 and 13 or 0), 557 - (i%2) * 17, 131 + 50 * i, 332, 142 + 50 * i)
 				love.graphics.setColor(0, 0, 0)
 			end
-			love.graphics.print(item, 350, 150 + 50 * i)
+			love.graphics.print(lang[item], 350, 150 + 50 * i)
 		end
 	end
 	ufo.draw()
