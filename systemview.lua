@@ -203,12 +203,12 @@ function SystemView:draw()
 	
 	love.graphics.pop()
 	love.graphics.setColor(0, 0, 0, 100)
-	love.graphics.rectangle('fill', 700, 0, 100, 30)
+	local w = love.graphics.getWidth()
+	love.graphics.rectangle('fill', w - 100, 0, 100, 30)
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(self.ownsystems .. ' / ' .. #self.system, 710, 5)
+	love.graphics.print(self.ownsystems .. ' / ' .. #self.system, w - 90, 5)
 	if self.endgame then
-		--love.graphics.line(700, 30.5, 700+100*self.endgame*.2, 30.5)
-		love.graphics.rectangle('fill', 700, 30, 100*self.endgame*.2, 3)
+		love.graphics.rectangle('fill', w - 100, 30, 100*self.endgame*.2, 3)
 	end
 end
 
