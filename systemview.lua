@@ -4,6 +4,7 @@ local highlight
 local selected
 
 ARROW_SPEED = .5
+POPULATION_GROWTH = .05
 
 function SystemView:setup()
 	SystemView.system = {}
@@ -78,7 +79,7 @@ function SystemView:update(dt)
 	highlight = nil
 	for i = 1, #self.system do
 		local sys = self.system[i]
-		sys.pop = math.min(sys.pop + dt*.1, math.pi*2)
+		sys.pop = math.min(sys.pop + dt * POPULATION_GROWTH, math.pi*2)
 		if tools.square_dist(mouse, sys) < 5 then
 			highlight = i
 			if selected and selected ~= highlight then
