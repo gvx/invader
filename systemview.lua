@@ -80,7 +80,7 @@ function SystemView:update(dt)
 	for i = 1, #self.system do
 		local sys = self.system[i]
 		sys.pop = math.min(sys.pop + dt * POPULATION_GROWTH, math.pi*2)
-		if tools.square_dist(mouse, sys) < 5 then
+		if tools.square_dist(mouse, sys) < 7 then
 			highlight = i
 			if selected and selected ~= highlight then
 				dist = math.sqrt((self.system[selected][1] - self.system[highlight][1])^2 + (self.system[selected][2] - self.system[highlight][2])^2)*6
@@ -163,10 +163,10 @@ function SystemView:draw()
 	for i = 1, #self.system do
 		love.graphics.setColor(255, 255, 255)
 		local x, y = unpack(self.system[i])
-		tools.circle(x*6, y*6, 10)
+		tools.circle(x*6, y*6, 13)
 		love.graphics.setColor(0, 0, 0)
-		tools.darc(x*6, y*6, 11, xtime+self.system[i].pop, xtime+2*math.pi)
-		tools.circle(x*6, y*6, 7)
+		tools.darc(x*6, y*6, 14, xtime+self.system[i].pop, xtime+2*math.pi)
+		tools.circle(x*6, y*6, 9)
 		if selected == i then
 			love.graphics.setColor(unpack(colors.sel))
 		else--if highlight and self.system[highlight].owner == self.system[i].owner then --highlight == i then
@@ -174,7 +174,7 @@ function SystemView:draw()
 		--else
 			--love.graphics.setColor(255, 255, 255)
 		end
-		tools.circle(x*6, y*6, 6)
+		tools.circle(x*6, y*6, 8)
 	end
 	love.graphics.setColor(255, 255, 255)
 	for i = 1, #self.arrows do
