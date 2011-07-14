@@ -61,7 +61,7 @@ function AI:update(dt)
 				self.timeleft = nil
 				-- finish arrow
 			else
-				local newamount = math.max(self.source.pop-dt, 0.01)
+				local newamount = math.max(self.source.pop-dt * ARROW_SPEED, 0.01)
 				self.curr_arrow[3] = self.curr_arrow[3] + self.source.pop - newamount
 				self.source.pop = newamount
 			end

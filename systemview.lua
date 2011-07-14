@@ -3,6 +3,8 @@ SystemView.font = love.graphics.newFont('kabel.ttf', 16)
 local highlight
 local selected
 
+ARROW_SPEED = .5
+
 function SystemView:setup()
 	SystemView.system = {}
 	SystemView.ownsystems = 0
@@ -90,26 +92,26 @@ function SystemView:update(dt)
 
 	for i = 1, #self.arrows do
 		local arr = self.arrows[i]
-		if arr[4] + dt < arr[5] then
-			arr[4] = arr[4] + dt
+		if arr[4] + dt * ARROW_SPEED < arr[5] then
+			arr[4] = arr[4] + dt * ARROW_SPEED
 		else
 			if arr[1].owner == arr[2].owner then --transport
-				local newpop = arr[3] - dt
+				local newpop = arr[3] - dt * ARROW_SPEED
 				if newpop > 0 then
 					arr[3] = newpop
-					arr[2].pop = math.min(arr[2].pop + dt, 2*math.pi)
+					arr[2].pop = math.min(arr[2].pop + dt * ARROW_SPEED, 2*math.pi)
 				else
 					arr[2].pop = math.min(arr[2].pop + arr[3], 2*math.pi)
 					--kill this arrow
 					arr.kill = true
 				end
 			else --attack
-				local newpop = arr[3] - dt
+				local newpop = arr[3] - dt * ARROW_SPEED
 				if newpop > 0 then
 					arr[3] = newpop
-					arr[2].pop = arr[2].pop - math.random()*2*dt
+					arr[2].pop = arr[2].pop - math.random()*2*dt * ARROW_SPEED
 				else
-					arr[2].pop = arr[2].pop + dt -- defense bonus
+					arr[2].pop = arr[2].pop + 0.03 -- defense bonus
 					--kill this arrow
 					arr.kill = true
 				end
@@ -136,7 +138,7 @@ function SystemView:update(dt)
 	if love.mouse.isDown'r' and selected and highlight and selected ~= highlight and SystemView.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
 		local sel = self.system[selected]
 		local arr = self.arrows[#self.arrows]
-		local newamount = math.max(sel.pop-dt, 0.01)
+		local newamount = math.max(sel.pop-dt * ARROW_SPEED, 0.01)
 		arr[3] = arr[3] + sel.pop - newamount
 		sel.pop = newamount
 	else
