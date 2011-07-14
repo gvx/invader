@@ -223,10 +223,6 @@ function SystemView:mousepressed(x, y, b)
 		local arr = {self.system[selected], self.system[highlight], 0, 0}
 		arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
 		self.arrows[#self.arrows + 1] = arr
-	elseif b == 'r' and selected and highlight == selected then
-		-- go into Planet mode
-		PlanetView.system = self.system[selected]
-		game:pushState 'PlanetView'
 	elseif b == 'l' then
 		selected = highlight and self.system[highlight].owner == 1 and highlight -- it looks odd, but it works
 		-- first it checks whether something is highlighted, then it check if the highlighted system has the right owner, and finally it passes the highlighted sytem to to selected

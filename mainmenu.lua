@@ -1,11 +1,8 @@
 MainMenu = Game:addState('MainMenu')
 MainMenu.selected = 1
-MainMenu.items = {'new', 'continue', 'load', 'save', 'settings', 'credits', 'quit'}
-MainMenu.showitem = {true, false, true, false, true, true, true, n = 5}
-local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Settings...', credits = 'Credits', quit = 'Quit'}
-if love.filesystem.exists('continue') then
-	table.insert(MainMenu.items, 1, 'continue')
-end
+MainMenu.items = {'new', 'continue', 'settings', 'credits', 'quit'}
+MainMenu.showitem = {true, false, true, true, true, n = 5}
+local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Full screen', credits = 'Credits', quit = 'Quit'}
 MainMenu.font = love.graphics.newFont('kabel.ttf', 26)
 function MainMenu:enterState()
 	love.graphics.setFont(MainMenu.font)
@@ -71,8 +68,7 @@ function MainMenu:update(dt)
 	end
 	
 	self.showitem[2] = SystemView.setup_done
-	self.showitem[4] = SystemView.setup_done
-	self.showitem.n = SystemView.setup_done and 7 or 5 
+	self.showitem.n = SystemView.setup_done and 5 or 4 
 
 	love.timer.sleep(50)
 end

@@ -13,7 +13,6 @@ Game.mousereleased = nilfunc
 
 require 'mainmenu'
 require 'systemview'
-require 'planetview'
 require 'pause'
 
 require 'ai'
