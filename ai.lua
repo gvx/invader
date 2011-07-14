@@ -57,7 +57,7 @@ function AI:update(dt)
 		elseif self.source then
 			self.timeleft = self.timeleft - dt
 			if self.timeleft <= 0 or self.source.pop < 0.05 or self.dist > 20 + self.source.pop * 5 then
-				self.timeout = math.random() * 2 + math.random()+math.random() + .5
+				self.timeout = math.random() + math.random() + .5
 				self.timeleft = nil
 				-- finish arrow
 			else

@@ -15,7 +15,7 @@ function SystemView:setup()
 	highlight = nil
 	selected = nil
 	for i = 1, 100 do -- O(N*(N-1))?
-		local this_system = {5 + math.random()*190, 5 + math.random()*190, pop = math.random()*math.pi+.2, owner = math.random(1,3), planets = {}}
+		local this_system = {5 + math.random()*190, 5 + math.random()*190, pop = math.random()*math.pi+.2, owner = math.random() < .08 and 1 or math.random(2,3), planets = {}}
 		this_system.planets[1] = this_system.pop
 		for i=2,math.random(1,3) do
 			this_system.planets[i] = -math.random() * 2 * math.pi
