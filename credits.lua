@@ -11,11 +11,11 @@ end
 local i = 0
 local function c(t)
 	i = i + 1
-	return {text = t, t = 0, i = i, x = 100, y = -100*i, centery = -250*i, targety = 150*i, update = update}
+	return {text = t, t = 0, i = i, x = 100, y = -100*i, centery = -250*i, targety = 600/5*i, update = update}
 end
 Credits.font = love.graphics.newFont('kabel.ttf', 20)
 Credits.license_font = love.graphics.newFont('kabel.ttf', 12)
-Credits.credits = {c"game by Robin Wellner", c"Kabel font from KDE", c"uses Stateful by kikito"}
+Credits.credits = {c"game by Robin Wellner", c"Kabel font from KDE", c"uses Stateful by kikito", c"Music: Alliance by Gobusto\nCC-BY-SA opengameart.org/content/alliance"}
 Credits.license = love.filesystem.read("LICENSE")
 
 function Credits:enterState()

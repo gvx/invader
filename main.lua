@@ -19,6 +19,9 @@ require 'credits'
 require 'ai'
 
 function love.load()
+	source = love.audio.newSource('alliance.ogg', 'streaming')
+	source:setLooping(true)
+	source:play()
 	game = Game:new()
 	--game.empires = {} or something like that?
 	game:pushState 'MainMenu'
