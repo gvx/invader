@@ -14,6 +14,7 @@ Game.mousereleased = nilfunc
 require 'mainmenu'
 require 'systemview'
 require 'pause'
+require 'credits'
 
 require 'ai'
 

@@ -127,6 +127,8 @@ function MainMenu:keypressed(k, u)
 			game:pushState 'SystemView'
 		elseif sel == 'continue' then
 			game:pushState 'SystemView'
+		elseif sel == 'credits' then
+			game:pushState 'Credits'
 		elseif sel == 'quit' then
 			love.event.push 'q'
 		elseif sel == 'settings' then
