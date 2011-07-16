@@ -135,8 +135,7 @@ function MainMenu:keypressed(k, u)
 			if fullscreen then
 				love.graphics.setMode(800, 600)
 			else
-				local modes = love.graphics.getModes()
-				love.graphics.setMode(modes[1].width, modes[1].height, true)
+				love.graphics.setMode(0, 0, true)
 			end
 			fullscreen = not fullscreen
 		end
