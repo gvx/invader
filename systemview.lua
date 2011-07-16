@@ -56,24 +56,25 @@ function SystemView:exitState()
 end
 
 local scrollspeed = 200
+local scrolledge = 30
 
 function SystemView:update(dt)
 	local k = love.keyboard.isDown
-	if k'left' and self.view.x > 0 then
+	local mouse = {love.mouse.getPosition()}
+	if (k'left' or mouse[1] < scrolledge) and self.view.x > 0 then
 		SystemView.view.x = SystemView.view.x - scrollspeed*dt
 	end
-	if k'right' and self.view.x < 1200 - love.graphics.getWidth() then
+	if (k'right' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < 1200 - love.graphics.getWidth() then
 		SystemView.view.x = SystemView.view.x + scrollspeed*dt
 	end
-	if k'up' and self.view.y > 0 then
+	if (k'up' or mouse[2] < scrolledge) and self.view.y > 0 then
 		SystemView.view.y = SystemView.view.y - scrollspeed*dt
 	end
-	if k 'down' and self.view.y < 1200 - love.graphics.getHeight() then
+	if (k'down' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < 1200 - love.graphics.getHeight() then
 		SystemView.view.y = SystemView.view.y + scrollspeed*dt
 	end
 
 	xtime = xtime + dt
-	local mouse = {love.mouse.getPosition()}
 	mouse[1] = (mouse[1] + self.view.x) * .1666666667
 	mouse[2] = (mouse[2] + self.view.y) * .1666666667
 	highlight = nil
