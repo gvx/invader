@@ -37,7 +37,7 @@ function AI:update(dt)
 					target = math.random(#game.system)
 					maxdist = (120 + game.system[t[source]].pop * 30)^2/36
 					local i = 0
-					while target == source or tools.square_dist(game.system[target], game.system[t[source]]) > maxdist do
+					while target == t[source] or tools.square_dist(game.system[target], game.system[t[source]]) > maxdist or (game.system[target].owner == self.name and game.system[target].pop > 1.5 * math.pi) do
 						target = math.random(#game.system)
 						i = i + 1
 						if i > 40 then
