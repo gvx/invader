@@ -17,7 +17,7 @@ function AI:update(dt)
 			self.timeout = self.timeout - dt
 			if self.timeout <= 0 then
 				self.timeout = nil
-				self.timeleft = math.random()*4 + .5
+				self.timeleft = math.random()*4 + 1
 				-- make an arrow
 				local source, target
 				local t = {}
