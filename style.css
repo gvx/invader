@@ -1,0 +1,79 @@
+@font-face {
+	font-family: kabel;
+	src: url(kabel.ttf);
+}
+
+body
+{
+	font-family: kabel;
+}
+
+header
+{
+	margin-left: 15px;
+}
+
+#main
+{
+	background-image: url(image.png);
+	background-repeat: no-repeat;
+	background-position: top right;
+	height: 297px;
+	margin: 15px;
+	padding: 2em;
+	background-color: #000000;
+	color: #ffffff;
+	border-radius: 20px;
+}
+
+#main a
+{
+	color: #7070ff;
+	text-decoration: none;
+	-moz-transition: all .7s;
+	-webkit-transition: none .7s;
+	-o-transition: all .7s;
+	transition: all .7s;
+}
+
+#main a:hover
+{
+	color: #a0a0ff;
+	text-shadow: 0px 0px 2px #a0a0ff;
+	-moz-transition: all .2s;
+	-webkit-transition: none .2s;
+	-o-transition: all .2s;
+	transition: all .2s;
+}
+
+.downloadbar
+{
+	margin-left: 20px;
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+a.download
+{
+	background-color: #340000;
+	margin: 4px;
+	padding: 10px;
+	border-radius: 1em;
+	box-shadow: 0px 0px 8px #540000;
+}
+
+a.download:hover
+{
+	background-color: #600000;
+	box-shadow: 0px 0px 15px #cc0000;
+	padding: 12px;
+	margin: 2px;
+	border-radius: 1.1em;
+}
+
+footer
+{
+	text-align: right;
+	font-size: 75%;
+	margin: 15px;
+}
