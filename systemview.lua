@@ -42,6 +42,11 @@ function SystemView:setup()
 		end
 	end
 
+	if SystemView.ownsystems == 0 then
+		self.system[1].owner = 1
+		SystemView.ownsystems = 1
+	end
+
 	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 40}}
 	
 	ais.load()

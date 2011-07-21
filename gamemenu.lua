@@ -1,7 +1,7 @@
 GameMenu = Game:addState('GameMenu')
 GameMenu.selected = 1
-GameMenu.items = {'fast', 'large', 'frantic', 'back'}
-local lang = {fast = 'Fast and small', large = 'Slow and large', frantic = 'Fast and large', back = 'Back to menu'}
+GameMenu.items = {'fast', 'large', 'frantic', 'underdog', 'back'}
+local lang = {fast = 'Fast and small', large = 'Slow and large', frantic = 'Fast and large', underdog = 'Underdog', back = 'Back to menu'}
 function GameMenu:enterState()
 	love.graphics.setFont(MainMenu.font)
 end
@@ -51,6 +51,7 @@ function GameMenu:keypressed(k, u)
 			HEIGHT = 100
 			FRACTION_PLAYER = .12
 			SystemView.setup_done = false
+			game:popState()
 			game:pushState 'SystemView'
 		elseif sel == 'large' then
 			ARROW_SPEED = 2
@@ -60,6 +61,7 @@ function GameMenu:keypressed(k, u)
 			HEIGHT = 200
 			FRACTION_PLAYER = .08
 			SystemView.setup_done = false
+			game:popState()
 			game:pushState 'SystemView'
 		elseif sel == 'frantic' then
 			ARROW_SPEED = 4
@@ -69,6 +71,17 @@ function GameMenu:keypressed(k, u)
 			HEIGHT = 200
 			FRACTION_PLAYER = .25
 			SystemView.setup_done = false
+			game:popState()
+			game:pushState 'SystemView'
+		elseif sel == 'underdog' then
+			ARROW_SPEED = 4
+			POPULATION_GROWTH = .3
+			MAX_SYSTEMS = 140
+			WIDTH = 200
+			HEIGHT = 150
+			FRACTION_PLAYER = 0
+			SystemView.setup_done = false
+			game:popState()
 			game:pushState 'SystemView'
 		elseif sel == 'back' then
 			game:popState()
