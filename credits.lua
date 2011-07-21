@@ -40,6 +40,7 @@ function Credits:draw()
 		love.graphics.print(credit.text, credit.x, credit.y)
 	end
 	love.graphics.setColor(255,255,255, alpha)
+	love.graphics.print("Version P1", 100, 50)
 	love.graphics.setFont(Credits.license_font)
 	love.graphics.print(Credits.license, 420, 130)
 end
