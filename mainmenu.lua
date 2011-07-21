@@ -1,8 +1,8 @@
 MainMenu = Game:addState('MainMenu')
 MainMenu.selected = 1
-MainMenu.items = {'new', 'continue', 'settings', 'credits', 'quit'}
-MainMenu.showitem = {true, false, true, true, true, n = 5}
-local lang = {new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Full screen', credits = 'Credits', quit = 'Quit'}
+MainMenu.items = {'new', 'quick', 'continue', 'settings', 'credits', 'quit'}
+MainMenu.showitem = {true, true, false, true, true, true, n = 5}
+local lang = {quick = 'Quick start', new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Full screen', credits = 'Credits', quit = 'Quit'}
 MainMenu.font = love.graphics.newFont('kabel.ttf', 26)
 function MainMenu:enterState()
 	love.graphics.setFont(MainMenu.font)
@@ -67,8 +67,8 @@ function MainMenu:update(dt)
 		end
 	end
 	
-	self.showitem[2] = SystemView.setup_done
-	self.showitem.n = SystemView.setup_done and 5 or 4 
+	self.showitem[3] = SystemView.setup_done
+	self.showitem.n = SystemView.setup_done and 6 or 5 
 
 	love.timer.sleep(50)
 end
@@ -123,6 +123,9 @@ function MainMenu:keypressed(k, u)
 		j = j + i - 1
 		local sel = MainMenu.items[j]
 		if sel == 'new' then
+			SystemView.setup_done = false
+			game:pushState 'SystemView'
+		elseif sel == 'quick' then
 			SystemView.setup_done = false
 			game:pushState 'SystemView'
 		elseif sel == 'continue' then
