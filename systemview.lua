@@ -132,6 +132,9 @@ function SystemView:update(dt)
 						SystemView.ownsystems = SystemView.ownsystems + 1
 					elseif arr[2].owner == 1 then -- aww
 						SystemView.ownsystems = SystemView.ownsystems - 1
+						if selected and arr[2] == self.system[selected] then
+							selected = false
+						end
 					end
 					arr[2].owner = arr[1].owner
 					arr[2].pop = -arr[2].pop
