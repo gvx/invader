@@ -51,6 +51,7 @@ end
 
 function SystemView:enterState()
 	love.graphics.setFont(SystemView.font)
+	self.endgame = nil
 	if not self.setup_done then
 		self:setup()
 	end
