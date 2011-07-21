@@ -6,6 +6,9 @@ local selected
 ARROW_SPEED = 2
 POPULATION_GROWTH = .2
 MAX_SYSTEMS = 100
+WIDTH = 200
+HEIGHT = 200
+FRACTION_PLAYER = .08
 
 function SystemView:setup()
 	SystemView.system = {}
@@ -16,7 +19,7 @@ function SystemView:setup()
 	highlight = nil
 	selected = nil
 	for i = 1, MAX_SYSTEMS do -- O(N*(N-1))?
-		local this_system = {5 + math.random()*190, 5 + math.random()*190, pop = math.random()*math.pi+.2, owner = math.random() < .08 and 1 or math.random(2,3), planets = {}}
+		local this_system = {5 + math.random()*(WIDTH-10), 5 + math.random()*(HEIGHT-10), pop = math.random()*math.pi+.2, owner = math.random() < FRACTION_PLAYER and 1 or math.random(2,3), planets = {}}
 		this_system.planets[1] = this_system.pop
 		for i=2,math.random(1,3) do
 			this_system.planets[i] = -math.random() * 2 * math.pi
@@ -26,8 +29,8 @@ function SystemView:setup()
 			found_good_location = true -- we assume that
 			for j=1,i-1 do
 				if tools.square_dist(this_system, self.system[j]) < 125 then
-					this_system[1] = 5 + math.random()*190
-					this_system[2] = 5 + math.random()*190
+					this_system[1] = 5 + math.random()*(WIDTH-10)
+					this_system[2] = 5 + math.random()*(HEIGHT-10)
 					found_good_location = false
 					break
 				end
@@ -65,13 +68,13 @@ function SystemView:update(dt)
 	if (k'left' or k'a' or mouse[1] < scrolledge) and self.view.x > 0 then
 		SystemView.view.x = SystemView.view.x - scrollspeed*dt
 	end
-	if (k'right' or k'd' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < 1200 - love.graphics.getWidth() then
+	if (k'right' or k'd' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < WIDTH*6 - love.graphics.getWidth() then
 		SystemView.view.x = SystemView.view.x + scrollspeed*dt
 	end
 	if (k'up' or k'w' or mouse[2] < scrolledge) and self.view.y > 0 then
 		SystemView.view.y = SystemView.view.y - scrollspeed*dt
 	end
-	if (k'down' or k's' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < 1200 - love.graphics.getHeight() then
+	if (k'down' or k's' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < HEIGHT*6 - love.graphics.getHeight() then
 		SystemView.view.y = SystemView.view.y + scrollspeed*dt
 	end
 

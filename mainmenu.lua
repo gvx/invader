@@ -123,8 +123,7 @@ function MainMenu:keypressed(k, u)
 		j = j + i - 1
 		local sel = MainMenu.items[j]
 		if sel == 'new' then
-			SystemView.setup_done = false
-			game:pushState 'SystemView'
+			game:pushState 'GameMenu'
 		elseif sel == 'quick' then
 			SystemView.setup_done = false
 			game:pushState 'SystemView'
