@@ -61,16 +61,16 @@ local scrolledge = 30
 function SystemView:update(dt)
 	local k = love.keyboard.isDown
 	local mouse = {love.mouse.getPosition()}
-	if (k'left' or mouse[1] < scrolledge) and self.view.x > 0 then
+	if (k'left' or k'a' or mouse[1] < scrolledge) and self.view.x > 0 then
 		SystemView.view.x = SystemView.view.x - scrollspeed*dt
 	end
-	if (k'right' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < 1200 - love.graphics.getWidth() then
+	if (k'right' or k'd' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < 1200 - love.graphics.getWidth() then
 		SystemView.view.x = SystemView.view.x + scrollspeed*dt
 	end
-	if (k'up' or mouse[2] < scrolledge) and self.view.y > 0 then
+	if (k'up' or k'w' or mouse[2] < scrolledge) and self.view.y > 0 then
 		SystemView.view.y = SystemView.view.y - scrollspeed*dt
 	end
-	if (k'down' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < 1200 - love.graphics.getHeight() then
+	if (k'down' or k's' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < 1200 - love.graphics.getHeight() then
 		SystemView.view.y = SystemView.view.y + scrollspeed*dt
 	end
 
