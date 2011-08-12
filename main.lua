@@ -53,7 +53,7 @@ function love.mousereleased(x, y, button)
 	game:mousereleased(x, y, button)
 end
 
-local noPause = {Pause = true, MainMenu = true, PlanetView = true}
+local noPause = {Pause = true, MainMenu = true, GameMenu = true, Settings = true}
 function love.focus(f)
 	if not f and not noPause[game:getCurrentStateName()] then
 		game:pushState 'Pause'
