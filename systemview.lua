@@ -43,7 +43,7 @@ function SystemView:setup()
 		SystemView.ownsystems = 1
 	end
 
-	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 40}}
+	colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 80}}
 	
 	ais.load()
 	
