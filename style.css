@@ -13,12 +13,8 @@ header
 	margin-left: 15px;
 }
 
-#main
+.boxbar
 {
-	background-image: url(image.png);
-	background-repeat: no-repeat;
-	background-position: top right;
-	height: 297px;
 	margin: 15px;
 	padding: 2em;
 	background-color: #000000;
@@ -26,7 +22,15 @@ header
 	border-radius: 20px;
 }
 
-#main a
+#main
+{
+	background-image: url(image.png);
+	background-repeat: no-repeat;
+	background-position: top right;
+	height: 297px;
+}
+
+.boxbar a
 {
 	color: #7070ff;
 	text-decoration: none;
@@ -36,7 +40,7 @@ header
 	transition: all .7s;
 }
 
-#main a:hover
+.boxbar a:hover
 {
 	color: #a0a0ff;
 	text-shadow: 0px 0px 2px #a0a0ff;
