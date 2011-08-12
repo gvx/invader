@@ -223,7 +223,11 @@ function SystemView:draw()
 end
 
 function SystemView:keypressed(k, u)
-	if k == 'escape' then game:popState() end
+	if k == 'escape' then
+		game:popState() 
+	elseif k == 'p' then
+		game:pushState 'Pause'
+	end
 end
 
 function SystemView:mousepressed(x, y, b)
