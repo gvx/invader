@@ -19,11 +19,7 @@ function SystemView:setup()
 	highlight = nil
 	selected = nil
 	for i = 1, MAX_SYSTEMS do -- O(N*(N-1))?
-		local this_system = {5 + math.random()*(WIDTH-10), 5 + math.random()*(HEIGHT-10), pop = math.random()*math.pi+.2, owner = math.random() < FRACTION_PLAYER and 1 or math.random(2,3), planets = {}}
-		this_system.planets[1] = this_system.pop
-		for i=2,math.random(1,3) do
-			this_system.planets[i] = -math.random() * 2 * math.pi
-		end
+		local this_system = {5 + math.random()*(WIDTH-10), 5 + math.random()*(HEIGHT-10), pop = math.random()*math.pi+.2, owner = math.random() < FRACTION_PLAYER and 1 or math.random(2,3)}
 		local found_good_location
 		while not found_good_location do
 			found_good_location = true -- we assume that
