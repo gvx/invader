@@ -16,6 +16,7 @@ require 'systemview'
 require 'pause'
 require 'credits'
 require 'gamemenu'
+require 'settings'
 
 require 'ai'
 

@@ -2,7 +2,7 @@ MainMenu = Game:addState('MainMenu')
 MainMenu.selected = 1
 MainMenu.items = {'new', 'quick', 'continue', 'settings', 'credits', 'quit'}
 MainMenu.showitem = {true, true, false, true, true, true, n = 5}
-local lang = {quick = 'Quick start', new = 'New game', continue = 'Continue', load = 'Load game...', save = 'Save game...', settings = 'Full screen', credits = 'Credits', quit = 'Quit'}
+local lang = {quick = 'Quick start', new = 'New game...', continue = 'Continue', settings = 'Settings...', credits = 'Credits', quit = 'Quit'}
 MainMenu.font = love.graphics.newFont('kabel.ttf', 26)
 function MainMenu:enterState()
 	love.graphics.setFont(MainMenu.font)
@@ -134,12 +134,7 @@ function MainMenu:keypressed(k, u)
 		elseif sel == 'quit' then
 			love.event.push 'q'
 		elseif sel == 'settings' then
-			if fullscreen then
-				love.graphics.setMode(800, 600)
-			else
-				love.graphics.setMode(0, 0, true)
-			end
-			fullscreen = not fullscreen
+			game:pushState 'Settings'
 		end
 	end
 end
