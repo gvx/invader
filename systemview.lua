@@ -189,7 +189,8 @@ function SystemView:draw()
 	love.graphics.setColor(255, 255, 255)
 	for i = 1, #self.arrows do
 		local arr = self.arrows[i]
-		if self.system[highlight] == arr[1] then
+		local hil = self.system[highlight]
+		if hil == arr[1] or (hil == arr[2] and arr[1] ~= self.system[selected]) then
 			love.graphics.setColor(unpack(colors[arr[1].owner]))
 		else
 			love.graphics.setColor(255, 255, 255)
