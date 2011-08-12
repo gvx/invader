@@ -60,6 +60,7 @@ function Settings:keypressed(k, u)
 				lang.music = 'Play music'
 			end
 		elseif sel == 'tutorial' then
+			game:pushState 'Tutorial'
 		elseif sel == 'back' then
 			game:popState()
 		end

@@ -1,83 +1,74 @@
-SystemView = Game:addState('SystemView')
-SystemView.font = love.graphics.newFont('kabel.ttf', 16)
+Tutorial = Game:addState('Tutorial')
+Tutorial.font = love.graphics.newFont('kabel.ttf', 16)
+Tutorial.texts = {
+   {'You command a mighty empire of Blue invaders.', 20, 20},
+   {'Move your mouse over a system to highlight it.', 20, 55},
+   {'Left-click on it to select it.', 20, 80},
+   {'Left-click on anything else to deselect.', 20, 105},
+   {'Use the WASD keys, the arrow keys or move', 20, 500},
+   {'your mouse to the edge of the screen to explore.', 20, 525},
+   {'Your enemies are Red and Green.', 20, 625},
+   {'Select your system below and click and hold', 20, 650},
+   {'the right mouse button on the enemy system.', 20, 675},
+   {'The white ring around each system represents its population.', 20, 775},
+   {'If one of your systems is under attack or simply vulnerable,', 20, 800},
+   {'you can send back-up the same way you can attack enemies.', 20, 825},
+   {'Press escape to go back to the menu.', 20, 950},
+}
 local highlight
 local selected
 
-ARROW_SPEED = 2
-POPULATION_GROWTH = .2
-MAX_SYSTEMS = 100
-WIDTH = 200
-HEIGHT = 200
-FRACTION_PLAYER = .08
+local ARROW_SPEED = 2
+local POPULATION_GROWTH = 0--.2
+local MAX_SYSTEMS = 100
+local WIDTH = 200
+local HEIGHT = 200
+local FRACTION_PLAYER = .08
 
-colors = {{50, 50, 255}, {255, 50, 50}, {75, 255, 75}, sel = {150, 150, 255}, sel_alpha = {150, 150, 255, 80}}
-
-function SystemView:setup()
-	SystemView.system = {}
-	SystemView.ownsystems = 0
-	SystemView.view = {x = 0, y = 0}
-	SystemView.arrows = {} --{origin, target, pos, pop}
+function Tutorial:setup()
+	Tutorial.system = {
+		-- first system: highlighting and selecting
+		{60, 30, pop = 2*math.pi, owner = 1},
+		-- second and third system: conquest
+		{30, 120, pop = 2*math.pi, owner = 1},
+		{50, 120, pop = math.pi, owner = 2},
+	}
+	Tutorial.view = {x = 0, y = 0}
+	Tutorial.arrows = {} --{origin, target, pos, pop}
 	xtime = 0
 	highlight = nil
 	selected = nil
-	for i = 1, MAX_SYSTEMS do -- O(N*(N-1))?
-		local this_system = {5 + math.random()*(WIDTH-10), 5 + math.random()*(HEIGHT-10), pop = math.random()*math.pi+.2, owner = math.random() < FRACTION_PLAYER and 1 or math.random(2,3)}
-		local found_good_location
-		while not found_good_location do
-			found_good_location = true -- we assume that
-			for j=1,i-1 do
-				if tools.square_dist(this_system, self.system[j]) < 125 then
-					this_system[1] = 5 + math.random()*(WIDTH-10)
-					this_system[2] = 5 + math.random()*(HEIGHT-10)
-					found_good_location = false
-					break
-				end
-			end
-		end
-		self.system[#self.system + 1] = this_system
-		if this_system.owner == 1 then
-			SystemView.ownsystems = SystemView.ownsystems + 1
-		end
-	end
 
-	if SystemView.ownsystems == 0 then
-		self.system[1].owner = 1
-		SystemView.ownsystems = 1
-	end
-	
-	ais.load()
-	
-	SystemView.setup_done = true
+	Tutorial.setup_done = true
 end
 
-function SystemView:enterState()
-	love.graphics.setFont(SystemView.font)
-	self.endgame = nil
+function Tutorial:enterState()
+	love.graphics.setFont(Tutorial.font)
 	if not self.setup_done then
 		self:setup()
 	end
 end
-function SystemView:exitState()
+function Tutorial:exitState()
 	love.graphics.setFont(MainMenu.font)
 end
 
 local scrollspeed = 200
 local scrolledge = 30
 
-function SystemView:update(dt)
+function Tutorial:update(dt)
 	local k = love.keyboard.isDown
 	local mouse = {love.mouse.getPosition()}
 	if (k'left' or k'a' or mouse[1] < scrolledge) and self.view.x > 0 then
-		SystemView.view.x = SystemView.view.x - scrollspeed*dt
+		Tutorial.view.x = Tutorial.view.x - scrollspeed*dt
 	end
 	if (k'right' or k'd' or mouse[1] > love.graphics.getWidth() - scrolledge) and self.view.x < WIDTH*6 - love.graphics.getWidth() then
-		SystemView.view.x = SystemView.view.x + scrollspeed*dt
+		Tutorial.view.x = Tutorial.view.x + scrollspeed*dt
 	end
 	if (k'up' or k'w' or mouse[2] < scrolledge) and self.view.y > 0 then
-		SystemView.view.y = SystemView.view.y - scrollspeed*dt
+		Tutorial.view.y = Tutorial.view.y - scrollspeed*dt
 	end
 	if (k'down' or k's' or mouse[2] > love.graphics.getHeight() - scrolledge) and self.view.y < HEIGHT*6 - love.graphics.getHeight() then
-		SystemView.view.y = SystemView.view.y + scrollspeed*dt
+		Tutorial.view.y = Tutorial.view.y + scrollspeed*dt
 	end
 
 	xtime = xtime + dt
@@ -95,8 +86,6 @@ function SystemView:update(dt)
 			break
 		end
 	end
-
-	ais.update(dt)
 
 	for i = 1, #self.arrows do
 		local arr = self.arrows[i]
@@ -124,14 +113,6 @@ function SystemView:update(dt)
 					arr.kill = true
 				end
 				if arr[2].pop < 0 then
-					if arr[1].owner == 1 then -- yay!
-						SystemView.ownsystems = SystemView.ownsystems + 1
-					elseif arr[2].owner == 1 then -- aww
-						SystemView.ownsystems = SystemView.ownsystems - 1
-						if selected and arr[2] == self.system[selected] then
-							selected = false
-						end
-					end
 					arr[2].owner = arr[1].owner
 					arr[2].pop = -arr[2].pop
 				end
@@ -146,28 +127,18 @@ function SystemView:update(dt)
 			i = i + 1
 		end
 	end
-	if love.mouse.isDown'r' and selected and highlight and selected ~= highlight and SystemView.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
+	if love.mouse.isDown'r' and selected and highlight and selected ~= highlight and Tutorial.flowing and dist <= 120 + self.system[selected].pop * 30 and self.system[selected].pop > 0.05 --[[and self.system[highlight].owner ~= 1 -- [=[ also works for transportation ]=] ]] then
 		local sel = self.system[selected]
 		local arr = self.arrows[#self.arrows]
 		local newamount = math.max(sel.pop-dt * ARROW_SPEED, 0.01)
 		arr[3] = arr[3] + sel.pop - newamount
 		sel.pop = newamount
 	else
-		SystemView.flowing = false
-	end
-	if self.endgame then
-		self.endgame = self.endgame - dt
-		if self.endgame <= 0 then
-			self.endgame = nil
-			SystemView.setup_done = false
-			game:popState()
-		end
-	elseif self.ownsystems == #self.system or self.ownsystems == 0 then
-		self.endgame = 5
+		Tutorial.flowing = false
 	end
 end
 
-function SystemView:draw()
+function Tutorial:draw()
 	love.graphics.push()
 	love.graphics.translate(-self.view.x,-self.view.y)
 	for i = 1, #self.system do
@@ -211,19 +182,15 @@ function SystemView:draw()
 		love.graphics.setColor(255, 255, 255, 15)
 		tools.fillcircle(x*6, y*6, 120 + self.system[i].pop * 30)
 	end
-	
-	love.graphics.pop()
-	love.graphics.setColor(0, 0, 0, 100)
-	local w = love.graphics.getWidth()
-	love.graphics.rectangle('fill', w - 100, 0, 100, 30)
+
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(self.ownsystems .. ' / ' .. #self.system, w - 90, 5)
-	if self.endgame then
-		love.graphics.rectangle('fill', w - 100, 30, 100*self.endgame*.2, 3)
-	end
+	for _, text in ipairs(self.texts) do
+		love.graphics.print(unpack(text))
+	end	
+	love.graphics.pop()
 end
 
-function SystemView:keypressed(k, u)
+function Tutorial:keypressed(k, u)
 	if k == 'escape' then
 		game:popState() 
 	elseif k == 'p' then
@@ -231,10 +198,10 @@ function SystemView:keypressed(k, u)
 	end
 end
 
-function SystemView:mousepressed(x, y, b)
+function Tutorial:mousepressed(x, y, b)
 	if b == 'r' and selected and self.system[selected].pop > .05 and highlight and highlight ~= selected and dist <= 120 + self.system[selected].pop * 30 then
 		--attack/transport!
-		SystemView.flowing = true
+		Tutorial.flowing = true
 		local arr = {self.system[selected], self.system[highlight], 0, 0}
 		arr[5] = math.sqrt((arr[1][1]-arr[2][1])^2 + (arr[1][2]-arr[2][2])^2)/6.66667 -- if only i knew *why* 6 2/3...
 		self.arrows[#self.arrows + 1] = arr

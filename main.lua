@@ -17,6 +17,7 @@ require 'pause'
 require 'credits'
 require 'gamemenu'
 require 'settings'
+require 'tutorial'
 
 require 'ai'
 
